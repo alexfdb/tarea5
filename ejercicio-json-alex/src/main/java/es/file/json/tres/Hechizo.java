@@ -1,7 +1,6 @@
 package es.file.json.tres;
 
 import com.fasterxml.jackson.annotation.*;
-import java.time.LocalDate;
 import java.util.Objects;
 /**
  * @author alexfdb

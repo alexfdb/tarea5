@@ -1,5 +1,6 @@
 package es.file.json.uno;
 
+import java.io.File;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -13,11 +14,12 @@ import es.file.json.utils.JsonUtil;
  * @author alexfdb
  * @version 1.0.0
  */
-public class CaballeroService extends JsonUtil{
+public class CaballeroService {
 
-    String path = "src/main/resources/caballeros.json";
-    TypeReference<Set<Caballero>> typeReference = new TypeReference<Set<Caballero>>() {};
-    Set<Caballero> caballeros = JsonUtil.jsonToSet(path, typeReference);
+    private String path = "src/main/resources/caballeros.json";
+    private File file = new File(path);
+    private TypeReference<Set<Caballero>> typeReference = new TypeReference<Set<Caballero>>() {};
+    private Set<Caballero> caballeros = JsonUtil.jsonToSet(file, typeReference);
 
     /**
      * Constructor vacio.
@@ -45,7 +47,10 @@ public class CaballeroService extends JsonUtil{
      */
     public boolean add(Caballero obj) {
         if(obj == null) return false;
-        return caballeros.add(obj);
+        if(caballeros.add(obj)) {
+            return JsonUtil.setToJson(caballeros, file);
+        }
+        return false;
     }
 
     /**
@@ -55,7 +60,10 @@ public class CaballeroService extends JsonUtil{
      */
     public boolean delete(Caballero obj) {
         if(obj == null) return false;
-        return caballeros.removeIf(c -> c.equals(obj));
+        if(caballeros.removeIf(c -> c.equals(obj))) {
+            return JsonUtil.setToJson(caballeros, file);
+        }
+        return false;
     }
 
     /**

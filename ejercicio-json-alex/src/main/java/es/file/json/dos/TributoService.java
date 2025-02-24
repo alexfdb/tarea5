@@ -1,5 +1,6 @@
 package es.file.json.dos;
 
+import java.io.File;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -15,9 +16,10 @@ import es.file.json.utils.JsonUtil;
  */
 public class TributoService {
 
-    String path = "src/main/resources/tributos.json";
-    TypeReference<Set<Tributo>> typeReference = new TypeReference<Set<Tributo>>() {};
-    Set<Tributo> tributos = JsonUtil.jsonToSet(path, typeReference);
+    private String path = "src/main/resources/tributos.json";
+    private File file = new File(path);
+    private TypeReference<Set<Tributo>> typeReference = new TypeReference<Set<Tributo>>() {};
+    private Set<Tributo> tributos = JsonUtil.jsonToSet(file, typeReference);
 
     /**
      * Constructor vacio.
@@ -45,7 +47,10 @@ public class TributoService {
      */
     public boolean add(Tributo obj) {
         if(obj == null) return false;
-        return tributos.add(obj);
+        if(tributos.add(obj)) {
+            return JsonUtil.setToJson(tributos, file);
+        }
+        return false;
     }
 
     /**
@@ -55,7 +60,10 @@ public class TributoService {
      */
     public boolean delete(Tributo obj) {
         if(obj == null) return false;
-        return tributos.removeIf(t -> t.equals(obj));
+        if(tributos.removeIf(t -> t.equals(obj))) {
+            return JsonUtil.setToJson(tributos, file);
+        }
+        return false;
     }
 
     /**

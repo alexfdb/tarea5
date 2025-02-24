@@ -1,6 +1,7 @@
 package es.file.json.tres;
 
 
+import java.io.File;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -16,9 +17,10 @@ import es.file.json.utils.JsonUtil;
  */
 public class HechizoService   {
 
-    String path = "src/main/resources/hechizos.json";
-    TypeReference<Set<Hechizo>> typeReference = new TypeReference<Set<Hechizo>>() {};
-    Set<Hechizo> hechizos = JsonUtil.jsonToSet(path, typeReference);
+    private String path = "src/main/resources/hechizos.json";
+    private File file = new File(path);
+    private TypeReference<Set<Hechizo>> typeReference = new TypeReference<Set<Hechizo>>() {};
+    private Set<Hechizo> hechizos = JsonUtil.jsonToSet(file, typeReference);
     
     /**
      * Constructor vacio.
@@ -46,7 +48,10 @@ public class HechizoService   {
      */
     public boolean add(Hechizo obj) {
         if(obj == null) return false;
-        return hechizos.add(obj);
+        if(hechizos.add(obj)) {
+            return JsonUtil.setToJson(hechizos, file);
+        }
+        return false;
     }
 
     /**
@@ -56,7 +61,10 @@ public class HechizoService   {
      */
     public boolean delete(Hechizo obj) {
         if(obj == null) return false;
-        return hechizos.removeIf(h -> h.equals(obj));
+        if(hechizos.removeIf(h -> h.equals(obj))) {
+            return JsonUtil.setToJson(hechizos, file);
+        }
+        return false;
     }
 
     /**

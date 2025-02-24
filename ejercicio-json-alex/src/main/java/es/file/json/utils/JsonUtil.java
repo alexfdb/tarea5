@@ -10,7 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * @author alexfdb
  * @version 1.0.0
  */
-public abstract class JsonUtil {
+public class JsonUtil {
     
     /**
      * Constructor vacio.
@@ -24,10 +24,10 @@ public abstract class JsonUtil {
      * @param typeRef TypeReference del Set con el tipo generico.
      * @return Retorna el Set tras la deserializacion.
      */
-    public static <T> Set<T> jsonToSet(String jsonPath, TypeReference<Set<T>> typeRef) {
+    public static <T> Set<T> jsonToSet(File file, TypeReference<Set<T>> typeRef) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
-            return objectMapper.readValue(new File(jsonPath), typeRef);
+            return objectMapper.readValue(file, typeRef);
         } catch (Exception e) {
             e.printStackTrace();
             return new HashSet<>();
@@ -41,10 +41,10 @@ public abstract class JsonUtil {
      * @param jsonPath Ruta del json.
      * @return Retorna true si se serializo con exito.
      */
-    public static <T> boolean setToJson(Set<T> set, String jsonPath) {
+    public static <T> boolean setToJson(Set<T> set, File file) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
-            objectMapper.writeValue(new File(jsonPath), set);
+            objectMapper.writeValue(file, set);
             return true;
         } catch (Exception e) {
             e.printStackTrace();
